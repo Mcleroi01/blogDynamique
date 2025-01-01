@@ -48,4 +48,10 @@ class Article extends Model
     {
         return Str::slug($this->title);
     }
+
+    public function author()
+    {
+        return $this->belongsTo(User::class, 'author_id');
+    }
+
 }

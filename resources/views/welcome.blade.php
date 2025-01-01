@@ -224,9 +224,8 @@
                                                 href="{{ route('showPublicArticle', ['article' => $article->_id, 'slug' => Str::slug($article->titre)]) }}">
                                                 {{ $article->titre }}</a>
                                         </h3>
-                                        <p class="hidden md:block text-gray-600 leading-tight mb-1">This is a wider card
-                                            with
-                                            supporting text below as a natural lead-in to additional content.</p>
+                                        <p class="hidden md:block text-gray-600 leading-tight mb-1">
+                                            {{ substr($article->contenu, 0, 100) }}...</p>
                                         <a class="text-gray-500"
                                             href="{{ route('articles.byCategory', $article->categories->name) }}"><span
                                                 class="inline-block h-3 border-l-2 border-red-600 mr-2"></span>{{ $article->categories->name }}</a>
@@ -257,23 +256,26 @@
                         <div class="flex-shrink max-w-full w-full px-3 pb-5">
                             <div class="relative hover-img max-h-98 overflow-hidden">
                                 <!--thumbnail-->
-                                <a href="{{ route('showPublicArticle', ['article' => $alauneSportArticle->_id, 'slug' => Str::slug($alauneSportArticle->titre)]) }}">
+                                <a
+                                    href="{{ route('showPublicArticle', ['article' => $alauneSportArticle->_id, 'slug' => Str::slug($alauneSportArticle->titre)]) }}">
                                     <img class="max-w-full w-full mx-auto h-auto"
                                         src="{{ asset('storage/' . $alauneSportArticle->image) }}"
                                         alt="Image description">
                                 </a>
                                 <div class="absolute px-5 pt-8 pb-5 bottom-0 w-full bg-gradient-cover">
                                     <!--title-->
-                                    <a href="{{ route('showPublicArticle', ['article' => $alauneSportArticle->_id, 'slug' => Str::slug($alauneSportArticle->titre)]) }}">
+                                    <a
+                                        href="{{ route('showPublicArticle', ['article' => $alauneSportArticle->_id, 'slug' => Str::slug($alauneSportArticle->titre)]) }}">
                                         <h2 class="text-3xl font-bold capitalize text-white mb-3">
                                             {{ $alauneSportArticle->titre }}</h2>
                                     </a>
                                     <p class="text-gray-100 hidden sm:inline-block">
-                                        {{ substr($alauneSportArticle->titre, 0, 200) }}...</p>
+                                        {{ substr($alauneSportArticle->contenu, 0, 200) }}...</p>
                                     <!-- author and date -->
                                     <div class="pt-2">
                                         <div class="text-gray-100">
-                                            <div class="inline-block h-3 border-l-2 border-red-600 mr-2"></div> {{ $alauneSportArticle->categories->name }}
+                                            <div class="inline-block h-3 border-l-2 border-red-600 mr-2"></div>
+                                            {{ $alauneSportArticle->categories->name }}
                                         </div>
                                     </div>
                                 </div>
@@ -292,7 +294,9 @@
                                     </a>
                                     <div class="py-0 sm:py-3 pl-3 sm:pl-0">
                                         <h3 class="text-lg font-bold leading-tight mb-2">
-                                            <a href="{{ route('showPublicArticle', ['article' => $sport->_id, 'slug' => Str::slug($sport->titre)]) }}"> {{ $sport->titre }}</a>
+                                            <a
+                                                href="{{ route('showPublicArticle', ['article' => $sport->_id, 'slug' => Str::slug($sport->titre)]) }}">
+                                                {{ $sport->titre }}</a>
                                         </h3>
                                         <p class="hidden md:block text-gray-600 leading-tight mb-1">
                                             {{ substr($sport->contenu, 0, 100) }} ....</p>
@@ -315,26 +319,15 @@
                                 <h2 class="text-lg font-bold">Les plus populaires</h2>
                             </div>
                             <ul class="post-number">
-                                <li class="border-b border-gray-100 hover:bg-gray-50">
-                                    <a class="text-lg font-bold px-6 py-3 flex flex-row items-center" href="#">Why
-                                        the world would end without political polls</a>
-                                </li>
-                                <li class="border-b border-gray-100 hover:bg-gray-50">
-                                    <a class="text-lg font-bold px-6 py-3 flex flex-row items-center" href="#">Meet
-                                        The Man Who Designed The Ducati Monster</a>
-                                </li>
-                                <li class="border-b border-gray-100 hover:bg-gray-50">
-                                    <a class="text-lg font-bold px-6 py-3 flex flex-row items-center" href="#">2020
-                                        Audi R8 Spyder spy shots release</a>
-                                </li>
-                                <li class="border-b border-gray-100 hover:bg-gray-50">
-                                    <a class="text-lg font-bold px-6 py-3 flex flex-row items-center"
-                                        href="#">Lamborghini makes Huracán GT3 racer faster for 2019</a>
-                                </li>
-                                <li class="border-b border-gray-100 hover:bg-gray-50">
-                                    <a class="text-lg font-bold px-6 py-3 flex flex-row items-center" href="#">ZF
-                                        plans $14 billion autonomous vehicle push, concept van</a>
-                                </li>
+                                @foreach ($topArticles as $article)
+                                    <li class="border-b border-gray-100 hover:bg-gray-50">
+                                        <a class="text-lg font-bold px-6 py-3 flex flex-row items-center"
+                                            href="{{ route('showPublicArticle', ['article' => $article->_id, 'slug' => Str::slug($article->titre)]) }}">
+                                            {{ $article->titre }}
+
+                                        </a>
+                                    </li>
+                                @endforeach
                             </ul>
                         </div>
                     </div>
@@ -509,26 +502,15 @@
                                 <h2 class="text-lg font-bold">Les plus populaires</h2>
                             </div>
                             <ul class="post-number">
-                                <li class="border-b border-gray-100 hover:bg-gray-50">
-                                    <a class="text-lg font-bold px-6 py-3 flex flex-row items-center" href="#">Why
-                                        the world would end without political polls</a>
-                                </li>
-                                <li class="border-b border-gray-100 hover:bg-gray-50">
-                                    <a class="text-lg font-bold px-6 py-3 flex flex-row items-center" href="#">Meet
-                                        The Man Who Designed The Ducati Monster</a>
-                                </li>
-                                <li class="border-b border-gray-100 hover:bg-gray-50">
-                                    <a class="text-lg font-bold px-6 py-3 flex flex-row items-center" href="#">2020
-                                        Audi R8 Spyder spy shots release</a>
-                                </li>
-                                <li class="border-b border-gray-100 hover:bg-gray-50">
-                                    <a class="text-lg font-bold px-6 py-3 flex flex-row items-center"
-                                        href="#">Lamborghini makes Huracán GT3 racer faster for 2019</a>
-                                </li>
-                                <li class="border-b border-gray-100 hover:bg-gray-50">
-                                    <a class="text-lg font-bold px-6 py-3 flex flex-row items-center" href="#">ZF
-                                        plans $14 billion autonomous vehicle push, concept van</a>
-                                </li>
+                                @foreach ($topArticles as $article)
+                                    <li class="border-b border-gray-100 hover:bg-gray-50">
+                                        <a class="text-lg font-bold px-6 py-3 flex flex-row items-center"
+                                            href="{{ route('showPublicArticle', ['article' => $article->_id, 'slug' => Str::slug($article->titre)]) }}">
+                                            {{ $article->titre }}
+
+                                        </a>
+                                    </li>
+                                @endforeach
                             </ul>
                         </div>
                     </div>

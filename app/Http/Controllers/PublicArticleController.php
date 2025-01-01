@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use App\Models\Article;
 use App\Models\Categorie;
 use Illuminate\Support\Str;
@@ -30,46 +31,57 @@ class PublicArticleController extends Controller
                 $query->where('name', 'Sports');
             })->latest()->first();
 
-            return view('welcome', compact('alaune', 'dernieresNouvelles', 'articlesRecents', 'politiqueCategorieArticle', 'articles', 'sportCategorieArticle', 'alauneSportArticle'));
+
+            $topArticles = Article::orderBy('visits_count', 'desc')
+            ->take(5)
+            ->get();
+
+            return view('welcome', compact('alaune', 'topArticles', 'dernieresNouvelles', 'articlesRecents', 'politiqueCategorieArticle', 'articles', 'sportCategorieArticle', 'alauneSportArticle'));
         } catch (\Exception $e) {
 
-            // Traiter l'exception pour afficher un message d'erreur générique
-            return view('errors.500');  // Retourner une page d'erreur 500
-
+            return view('errors.500');
         }
     }
 
     public function showPublicArticle(Article $article)
     {
 
+        $topArticles = Article::orderBy('visits_count', 'desc')
+            ->take(5)
+            ->get();
 
-        return view('public.pages.single', compact('article'));
+            
+        
+        return view('public.pages.single', compact('article', 'topArticles'));
     }
-
-    public function articleAlaUne() {}
 
     public function articlesByCategory($categoryName)
     {
         try {
-            // Récupère la catégorie par son nom
+
             $category = Categorie::where('name', $categoryName)->first();
 
-            // Si la catégorie n'existe pas, redirige vers une page 404
+
             if (!$category) {
                 return view('errors.404');
             }
 
-            // Récupère les articles associés à la catégorie
+
             $articles = Article::whereHas('categories', function ($query) use ($category) {
                 $query->where('name', $category->name);
             })->latest()->paginate(10);
 
-            // Récupère l'article le plus récent de cette catégorie
+            $topArticles = Article::where('categorie_id', $category->id)
+            ->orderBy('visits_count', 'desc')
+            ->take(5)
+            ->get();
+
+
             $alauneSportArticle = Article::whereHas('categories', function ($query) use ($category) {
                 $query->where('name', $category->name);
             })->latest()->first();
 
-            // Si aucun article n'est trouvé, afficher un message personnalisé
+
             if ($articles->isEmpty()) {
                 return view('public.pages.category', [
                     'message' => "Aucun article trouvé pour la catégorie '$category->name'.",
@@ -77,14 +89,24 @@ class PublicArticleController extends Controller
                 ]);
             }
 
-            // Affiche les articles et la catégorie dans la vue
-            return view('public.pages.category', compact('articles', 'category', 'alauneSportArticle'));
+
+            return view('public.pages.category', compact('articles', 'category', 'alauneSportArticle', 'topArticles'));
         } catch (\Exception $e) {
             // Log l'erreur pour débogage
             Log::error('Error fetching articles by category: ' . $e->getMessage());
-
-            // En cas d'exception, retourne une page d'erreur générique
             return view('errors.500');
         }
+    }
+
+    public function articlesByAuthor(User $user)
+    {
+        
+        $articles = $user->articles;
+        $topArticles = Article::where('author_id', $user->id)
+            ->orderBy('visits_count', 'desc')
+            ->take(5)
+            ->get();
+
+        return view('public.pages.author', compact('articles', 'user', 'topArticles'));
     }
 }

@@ -89,8 +89,12 @@ class ArticleController extends Controller
             }
 
             $data['mis_a_la_une'] = $request->has('mis_a_la_une') ? 1 : 0;
+            
 
             $article = Article::create($data);
+
+            $article->author_id = auth()->user()->id;
+            $article->save();
 
 
 

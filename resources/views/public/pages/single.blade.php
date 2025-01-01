@@ -50,7 +50,7 @@
                                                 <path fill-rule="evenodd"
                                                     d="M13 14s1 0 1-1-1-4-6-4-6 3-6 4 1 1 1 1h10zm-9.995-.944v-.002.002zM3.022 13h9.956a.274.274 0 00.014-.002l.008-.002c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664a1.05 1.05 0 00.022.004zm9.974.056v-.002.002zM8 7a2 2 0 100-4 2 2 0 000 4zm3-2a3 3 0 11-6 0 3 3 0 016 0z"
                                                     clip-rule="evenodd"></path>
-                                            </svg> by <a class="font-semibold" href="#">Ari Budin</a>
+                                            </svg> by <a class="font-semibold" href="{{route('articles.by.author',$article->author->id)}}">{{$article->author->name}}</a>
                                         </span>
                                         <!--date-->
                                         <time class="mr-2 md:mr-4" datetime="{{ $article->created_at }}">
@@ -77,7 +77,7 @@
                                                 <path fill-rule="evenodd"
                                                     d="M8 5.5a2.5 2.5 0 100 5 2.5 2.5 0 000-5zM4.5 8a3.5 3.5 0 117 0 3.5 3.5 0 01-7 0z"
                                                     clip-rule="evenodd"></path>
-                                            </svg> 1.230 view
+                                            </svg> {{ number_format($article->visits_count) }}
                                         </span>
                                         <!--end view-->
                                     </div>
@@ -153,7 +153,7 @@
                                 <div class="flex-shrink max-w-full px-4 w-2/3 sm:w-3/4 md:w-10/12">
                                     <!--name-->
                                     <p class="text-lg leading-normal mb-2 font-semibold text-gray-800 dark:text-gray-100">
-                                        <span class="font-semibold">Ari budin</span>
+                                        <span class="font-semibold">{{$article->author->name}}</span>
                                     </p>
                                     <!-- website -->
                                     <p class="mb-1"><a target="_blank" class="text-red-700"
@@ -352,26 +352,17 @@
                                 <h2 class="text-lg font-bold">Most Popular</h2>
                             </div>
                             <ul class="post-number">
-                                <li class="border-b border-gray-100 hover:bg-gray-50">
-                                    <a class="text-lg font-bold px-6 py-3 flex flex-row items-center" href="#">Why
-                                        the world would end without political polls</a>
-                                </li>
-                                <li class="border-b border-gray-100 hover:bg-gray-50">
-                                    <a class="text-lg font-bold px-6 py-3 flex flex-row items-center" href="#">Meet
-                                        The Man Who Designed The Ducati Monster</a>
-                                </li>
-                                <li class="border-b border-gray-100 hover:bg-gray-50">
-                                    <a class="text-lg font-bold px-6 py-3 flex flex-row items-center" href="#">2020
-                                        Audi R8 Spyder spy shots release</a>
-                                </li>
-                                <li class="border-b border-gray-100 hover:bg-gray-50">
-                                    <a class="text-lg font-bold px-6 py-3 flex flex-row items-center"
-                                        href="#">Lamborghini makes Huracán GT3 racer faster for 2019</a>
-                                </li>
-                                <li class="border-b border-gray-100 hover:bg-gray-50">
-                                    <a class="text-lg font-bold px-6 py-3 flex flex-row items-center" href="#">ZF
-                                        plans $14 billion autonomous vehicle push, concept van</a>
-                                </li>
+                                @foreach ($topArticles as $article)
+                                    <li class="border-b border-gray-100 hover:bg-gray-50">
+                                        <a class="text-lg font-bold px-6 py-3 flex flex-row items-center"
+                                            href="{{ route('showPublicArticle', ['article' => $article->_id, 'slug' => Str::slug($article->titre)]) }}">
+                                            {{ $article->titre }}
+                                           
+                                        </a>
+                                    </li>
+                                @endforeach
+
+
                             </ul>
                         </div>
                     </div>
